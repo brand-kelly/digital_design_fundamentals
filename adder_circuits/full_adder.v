@@ -11,5 +11,5 @@ module full_adder (
   output cout
 );
   assign sum = (a ^ b ^ cin);
-  assign cout = ((cin & a) | (cin & b) | (b & a));
+  assign cout = ((a & b) | (a & cin) | (b & cin));
 endmodule

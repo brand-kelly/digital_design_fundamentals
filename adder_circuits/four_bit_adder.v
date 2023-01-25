@@ -11,7 +11,7 @@ module full_adder (
   output cout
 );
   assign sum = (a ^ b ^ cin);
-  assign cout = ((cin & a) | (cin & b) | (b & a));
+  assign cout = ((a & b) | (a & cin) | (b & cin));
 endmodule
 
 module four_bit_adder (
@@ -22,62 +22,62 @@ module four_bit_adder (
   output overfl,
   output [3:0] y
 );
+  wire a3;
+  wire b3;
   wire s0;
-  wire s1;
-  wire s2;
-  wire s3;
+  wire sum3;
   wire cout_temp;
-  wire s4;
-  wire s5;
-  wire s6;
-  wire s7;
-  wire s8;
-  wire s9;
-  wire s10;
-  wire s11;
-  wire s12;
-  wire s13;
-  wire s14;
-  assign s0 = a[3];
-  assign s4 = a[2];
-  assign s8 = a[1];
-  assign s12 = a[0];
-  assign s1 = b[3];
-  assign s5 = b[2];
-  assign s9 = b[1];
-  assign s13 = b[0];
+  wire a2;
+  wire b2;
+  wire s1;
+  wire sum2;
+  wire a1;
+  wire b1;
+  wire s2;
+  wire sum1;
+  wire a0;
+  wire b0;
+  wire sum0;
+  assign a3 = a[3];
+  assign a2 = a[2];
+  assign a1 = a[1];
+  assign a0 = a[0];
+  assign b3 = b[3];
+  assign b2 = b[2];
+  assign b1 = b[1];
+  assign b0 = b[0];
   full_adder full_adder_i0 (
-    .a( s12 ),
-    .b( s13 ),
+    .a( a0 ),
+    .b( b0 ),
     .cin( cin ),
-    .sum( s14 ),
-    .cout( s10 )
-  );
-  full_adder full_adder_i1 (
-    .a( s8 ),
-    .b( s9 ),
-    .cin( s10 ),
-    .sum( s11 ),
-    .cout( s6 )
-  );
-  full_adder full_adder_i2 (
-    .a( s4 ),
-    .b( s5 ),
-    .cin( s6 ),
-    .sum( s7 ),
+    .sum( sum0 ),
     .cout( s2 )
   );
-  full_adder full_adder_i3 (
-    .a( s0 ),
-    .b( s1 ),
+  full_adder full_adder_i1 (
+    .a( a1 ),
+    .b( b1 ),
     .cin( s2 ),
-    .sum( s3 ),
+    .sum( sum1 ),
+    .cout( s1 )
+  );
+  full_adder full_adder_i2 (
+    .a( a2 ),
+    .b( b2 ),
+    .cin( s1 ),
+    .sum( sum2 ),
+    .cout( s0 )
+  );
+  full_adder full_adder_i3 (
+    .a( a3 ),
+    .b( b3 ),
+    .cin( s0 ),
+    .sum( sum3 ),
     .cout( cout_temp )
   );
-  assign y[3] = s3;
-  assign y[2] = s7;
-  assign y[1] = s11;
-  assign y[0] = s14;
-  assign overfl = (cout_temp ^ s2);
+  assign y[3] = sum3;
+  assign y[2] = sum2;
+  assign y[1] = sum1;
+  assign y[0] = sum0;
+  assign overfl = (cout_temp ^ s0);
   assign cout = cout_temp;
 endmodule
